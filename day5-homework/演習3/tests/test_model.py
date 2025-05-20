@@ -205,6 +205,7 @@ def test_prediction_value_range(train_model):
         {0, 1}
     ), f"予測結果に0と1以外の値が含まれています: {unique_values}"
 
+
 def test_accuracy_meets_baseline(train_model):
     """精度がbaseline.txtに記載された値以上であるか確認し、上回っていればbaselineとモデルを上書き保存"""
     model, X_test, y_test = train_model
@@ -218,7 +219,9 @@ def test_accuracy_meets_baseline(train_model):
     y_pred = model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
 
-    print(f"📊 現在のモデル精度: {accuracy:.4f} / ベースライン: {baseline_accuracy:.4f}")
+    print(
+        f"📊 現在のモデル精度: {accuracy:.4f} / ベースライン: {baseline_accuracy:.4f}"
+    )
 
     if accuracy >= baseline_accuracy:
         # baseline.txt を上書き
@@ -229,10 +232,13 @@ def test_accuracy_meets_baseline(train_model):
         with open(MODEL_PATH, "wb") as f:
             pickle.dump(model, f)
 
-        print("✅ 新しいモデルがベースラインを上回ったため、baseline.txt とモデルを更新しました")
+        print(
+            "✅ 新しいモデルがベースラインを上回ったため、baseline.txt とモデルを更新しました"
+        )
     else:
-        print("⚠️ モデル精度がベースラインを下回ったため、baseline.txt およびモデルは更新されません")
+        print(
+            "⚠️ モデル精度がベースラインを下回ったため、baseline.txt およびモデルは更新されません"
+        )
 
     # テスト自体は必ず成功させておく（宿題提出条件を満たすため）
     assert True
-
