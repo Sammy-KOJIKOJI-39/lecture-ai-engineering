@@ -172,6 +172,7 @@ def test_model_reproducibility(sample_data, preprocessor):
         predictions1, predictions2
     ), "モデルの予測結果に再現性がありません"
 
+
 def test_input_shape(train_model):
     """モデルへの入力形状が正しいかを検証"""
     model, X_test, _ = train_model
@@ -180,6 +181,7 @@ def test_input_shape(train_model):
         assert y_pred.shape[0] == X_test.shape[0], "予測数と入力数が一致しません"
     except Exception as e:
         pytest.fail(f"入力形状の検証でエラーが発生: {e}")
+
 
 def test_empty_input_handling(train_model):
     """空データに対するモデルの堅牢性を検証"""
@@ -193,12 +195,16 @@ def test_empty_input_handling(train_model):
     except Exception as e:
         pytest.fail(f"予期しない例外が発生しました: {e}")
 
+
 def test_prediction_value_range(train_model):
     """推論結果が0または1のいずれかであるかを確認"""
     model, X_test, _ = train_model
     y_pred = model.predict(X_test)
     unique_values = np.unique(y_pred)
-    assert set(unique_values).issubset({0, 1}), f"予測結果に0と1以外の値が含まれています: {unique_values}"
+    assert set(unique_values).issubset(
+        {0, 1}
+    ), f"予測結果に0と1以外の値が含まれています: {unique_values}"
+
 
 def test_accuracy_meets_baseline(train_model):
     """精度がbaseline.txtに記載された値以上であるか確認"""
@@ -211,7 +217,10 @@ def test_accuracy_meets_baseline(train_model):
         baseline_accuracy = float(f.read().strip())
 
     from sklearn.metrics import accuracy_score
+
     y_pred = model.predict(X_test)
     accuracy = accuracy_score(y_test, y_pred)
 
-    assert accuracy >= baseline_accuracy, f"モデルの精度 {accuracy:.3f} がベースライン {baseline_accuracy:.3f} を下回っています"
+    assert (
+        accuracy >= baseline_accuracy
+    ), f"モデルの精度 {accuracy:.3f} がベースライン {baseline_accuracy:.3f} を下回っています"
